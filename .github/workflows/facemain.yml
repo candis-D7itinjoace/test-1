@@ -31,6 +31,11 @@ jobs:
           password: ${{secrets.ACR_PASSWORD}}
           # Container registry server url
           login-server: ${{secrets.ACR_SERVER_URL}}
+      - name: setup jdk
+        uses: actions/setup-java@v3.5.0
+        with:
+          java-version: '18'
+          distribution: 'temurin'
       - name: push image to ACR  and build it first
         run: |
           mvn clean install package
