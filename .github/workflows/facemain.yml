@@ -30,7 +30,7 @@ jobs:
           password: ${{secrets.ACR_PASSWORD}}
           # Container registry server url
           login-server: ${{secrets.ACR_SERVER_URL}}
-        
+      - name: push image to ACR  
         run: |
           docker build -t ${{secrets.ACR_SERVER_URL}}/test-service
           docker push ${{secrets.ACR_SERVER_URL}}/test-service
