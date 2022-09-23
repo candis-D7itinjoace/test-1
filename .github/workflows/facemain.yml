@@ -24,5 +24,16 @@ jobs:
       # Runs a single command using the runners shell
       - name: login to dockerhub
         run: |
-          docker login -u ligmaboys -p K1ll3rb123
-          echo "done"
+          docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: setup jdk
+        uses: actions/setup-java@v3.5.0
+        with:
+          java-version: "17"
+          distribution: "temurin"
+      - name: build jar with maven
+        run: mvn clean install package
+      - name: build docker image and push it to docker hub
+        run: |
+          docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/test-service
+          docker push ${{secrets.DOCKER_USER}}/test-service
+          
