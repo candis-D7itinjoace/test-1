@@ -19,21 +19,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.0
 
       # Runs a single command using the runners shell
-      - name: login to dockerhub
-        run: |
-          docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
-      - name: setup jdk
-        uses: actions/setup-java@v3.5.0
+      - name: Azure Container Registry Login build push image to ACR
+        uses: Azure/docker-login@v1
         with:
-          java-version: "17"
-          distribution: "temurin"
-      - name: build jar with maven
-        run: mvn clean install package
-      - name: build docker image and push it to docker hub
+          username: ${{secrets.ACR_USER}} 
+          # Container registry password
+          password: ${{secrets.ACR_PASSWORD}}
+          # Container registry server url
+          login-server: ${{secrets.ACR_SERVER_URL}}
+        
         run: |
-          docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/test-service
-          docker push ${{secrets.DOCKER_USER}}/test-service
+          docker build -t ${{secrets.ACR_SERVER_URL}}/test-service
+          docker push ${{secrets.ACR_SERVER_URL}}/test-service
           
