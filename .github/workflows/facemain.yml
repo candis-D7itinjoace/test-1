@@ -32,6 +32,6 @@ jobs:
           login-server: ${{secrets.ACR_SERVER_URL}}
       - name: push image to ACR  
         run: |
-          docker build --file Dockerfile -t ${{secrets.ACR_SERVER_URL}}/test-service
+          docker build . --file Dockerfile -t ${{secrets.ACR_SERVER_URL}}/test-service
           docker push ${{secrets.ACR_SERVER_URL}}/test-service
           
